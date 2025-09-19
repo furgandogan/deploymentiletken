@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: iletken
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: iletken
+  template:
+    metadata:
+      labels:
+        app: iletken
+    spec:
+      containers:
+      - name: conil
+        image: yildizozan/iletken:latest
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: iletken-service
+
+spec:
+  type: ClusterIP
+  selector:
+    app: iletken
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: iletken-ingress
+  
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "iletken.orebron.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: iletken-service
+            port:
+              number: 80
