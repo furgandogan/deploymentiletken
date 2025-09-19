@@ -5,7 +5,7 @@ metadata:
   name: iletken
 
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: iletken
@@ -55,3 +55,4 @@ spec:
             name: iletken-service
             port:
               number: 80
+
